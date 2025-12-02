@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Advent Calendar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at top, #ffecd2, #fcb69f);
+      --red: #c0392b;
+      --green: #1e8449;
+      --gold: #f1c40f;
+      --white: #ffffff;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.18);
+      --card-radius: 16px;
+      --transition-fast: 0.2s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-gradient);
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .page {
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #2c3e50;
+    }
+
+    .header-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--red);
+      text-shadow: 0 2px 0 #ffffff, 0 4px 10px rgba(0, 0, 0, 0.2);
+      margin-bottom: 8px;
+    }
+
+    .header-subtitle {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .calendar-frame {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Simple decorative “garland” */
+    .garland {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      pointer-events: none;
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .calendar-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .calendar-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .day {
+      position: relative;
+      perspective: 1000px;
+    }
+
+    .door {
+      position: relative;
+      width: 100%;
+      padding-top: 100%;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      background: linear-gradient(145deg, #c0392b, #1e8449);
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast), opacity var(--transition-fast);
+      transform-style: preserve-3d;
+    }
+
+    .door-inner {
+      position: absolute;
+      inset: 0;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--white);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+      gap: 4px;
+    }
+
+    .door:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+      filter: brightness(1.05);
+    }
+
+    .door-number {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .door-icon {
+      font-size: 1.3rem;
+    }
+
+    .door-label {
+      font-size: 0.7rem;
+      opacity: 0.9;
+    }
+
+    .door-locked {
+      background: linear-gradient(145deg, #7f8c8d, #95a5a6);
+      cursor: not-allowed;
+      filter: grayscale(0.15);
+    }
+
+    .door-locked:hover {
+      transform: none;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+      filter: grayscale(0.15);
+    }
+
+    .lock-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.55);
+      border-radius: 999px;
+      padding: 2px 6px;
+      font-size: 0.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .lock-badge span {
+      font-size: 0.75em;
+    }
+
+    .lock-text {
+      font-size: 0.6rem;
+      opacity: 0.9;
+    }
+
+    /* Footer info */
+    .footer {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    /* Modal popup */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease-out;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 20px 20px 16px;
+      max-width: 420px;
+      width: 92%;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      transform: scale(0.8) translateY(15px);
+      opacity: 0;
+      transition: transform 0.25s cubic-bezier(0.25, 0.9, 0.25, 1.3),
+        opacity 0.25s ease-out;
+      position: relative;
+      background-image: radial-gradient(circle at top left, rgba(241, 196, 15, 0.25), transparent 60%);
+    }
+
+    .modal-backdrop.open .modal {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      border: none;
+      background: transparent;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+      color: #7f8c8d;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .modal-day-pill {
+      background: var(--green);
+      color: white;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--red);
+    }
+
+    .modal-body {
+      font-size: 0.95rem;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .modal-image {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+
+    .modal-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(26, 188, 156, 0.08);
+      border: 1px solid rgba(26, 188, 156, 0.4);
+      color: #16a085;
+    }
+
+    .modal-link span {
+      font-size: 1rem;
+    }
+
+    /* Toast (for locked doors) */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(0, 0, 0, 0.82);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+      z-index: 1100;
+      pointer-events: none;
+    }
+
+    .toast.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Simple “snow” effect */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      color: #fff;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      pointer-events: none;
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <h1 class="header-title">Advent Calendar</h1>
+      <p class="header-subtitle">
+        One surprise for each day of December &mdash; doors unlock on their date.
+      </p>
+    </header>
+
+    <section class="calendar-frame">
+      <div class="garland">
+        🎄 ⭐ 🎁 ❄️ ⭐ 🎄
+      </div>
+
+      <div class="calendar-grid" id="calendarGrid">
+        <!-- Doors will be injected by JavaScript -->
+      </div>
+
+      <div class="footer" id="todayInfo"></div>
+    </section>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+      <div class="modal-header">
+        <div class="modal-day-pill" id="modalDayPill">Day 1</div>
+        <div class="modal-title" id="modalTitle">Title</div>
+      </div>
+      <div class="modal-image" id="modalImage">🎁</div>
+      <div class="modal-body" id="modalBody">Content goes here.</div>
+      <a href="#" id="modalLink" class="modal-link" target="_blank" rel="noreferrer">
+        <span>➜</span> <span id="modalLinkText">Open link</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <span>🔒</span>
+    <span id="toastText">Too early!</span>
+  </div>
+
+  <script>
+    /* 
+      === EDIT YOUR DAY CONTENT HERE ===
+      Each object represents one door (1–24).
+      - day: door number (1–24)
+      - title: heading in the popup
+      - message: text in the popup
+      - emoji: large emoji shown in popup
+      - linkText / linkUrl: optional button at the bottom
+    */
+    const dayContent = [
+      { day: 1, title: "Welcome to December!", emoji: "🎄", message: "This part was written on the second so skip to today - enjoy a playlist as an apology", linkText: "Play a Christmas playlist", linkUrl: "https://www.youtube.com/results?search_query=christmas+playlist" },
+      { day: 2, title: "Coffee", emoji: "☕", message: "A coffee from blank street on me", linkText: "", linkUrl: "" },
+      { day: 3, title: "Cosy Lights", emoji: "✨", message: "Hang fairy lights or light a candle to make your space feel extra cosy.", linkText: "", linkUrl: "" },
+      { day: 4, title: "Festive Walk", emoji: "🚶‍♂️", message: "Take a short walk and look for decorations or lights in your neighbourhood.", linkText: "", linkUrl: "" },
+      { day: 5, title: "Kindness Day", emoji: "💌", message: "Send a kind message to someone you haven’t spoken to in a while.", linkText: "", linkUrl: "" },
+      { day: 6, title: "Treat Yourself", emoji: "🍫", message: "Enjoy a little sweet treat &mdash; you’ve earned it.", linkText: "", linkUrl: "" },
+      { day: 7, title: "Movie Night", emoji: "🎬", message: "Watch a festive film (or at least a cosy episode of a favourite show).", linkText: "Find Christmas movies", linkUrl: "https://www.google.com/search?q=best+christmas+movies" },
+      { day: 8, title: "Decorate Something", emoji: "🎀", message: "Add a festive touch to your desk, room, or background.", linkText: "", linkUrl: "" },
+      { day: 9, title: "Hot Drink Break", emoji: "☕", message: "Make a hot chocolate, tea or coffee and really savour it.", linkText: "", linkUrl: "" },
+      { day: 10, title: "Give a Compliment", emoji: "😊", message: "Give someone a genuine compliment today.", linkText: "", linkUrl: "" },
+      { day: 11, title: "Tiny Tidy-Up", emoji: "🧹", message: "Spend 5 minutes tidying your space so it feels calmer.", linkText: "", linkUrl: "" },
+      { day: 12, title: "Listen to a Song", emoji: "🎵", message: "Play a Christmas song that always makes you smile.", linkText: "", linkUrl: "" },
+      { day: 13, title: "Digital Detox 10", emoji: "📵", message: "Take 10 minutes away from screens, just breathing and being.", linkText: "", linkUrl: "" },
+      { day: 14, title: "Write a Wish", emoji: "⭐", message: "Write down one wish or intention for the new year.", linkText: "", linkUrl: "" },
+      { day: 15, title: "Share a Memory", emoji: "📸", message: "Share a favourite winter memory with a friend or family member.", linkText: "", linkUrl: "" },
+      { day: 16, title: "Cosy Reading", emoji: "📚", message: "Read a few pages of a book, blog or article you enjoy.", linkText: "", linkUrl: "" },
+      { day: 17, title: "Charity Moment", emoji: "🎁", message: "Do something small for someone else &mdash; donate, help, or simply listen.", linkText: "", linkUrl: "" },
+      { day: 18, title: "Stretch & Breathe", emoji: "🧘‍♀️", message: "Take five slow deep breaths and gently stretch your body.", linkText: "", linkUrl: "" },
+      { day: 19, title: "Bake or Buy", emoji: "🍪", message: "Enjoy a festive snack &mdash; homemade or store-bought both count!", linkText: "", linkUrl: "" },
+      { day: 20, title: "Photo Time", emoji: "🤳", message: "Take a silly or cosy photo to remember this season.", linkText: "", linkUrl: "" },
+      { day: 21, title: "Write a Card", emoji: "💌", message: "Write a card or message to someone special.", linkText: "", linkUrl: "" },
+      { day: 22, title: "Plan a Pause", emoji: "🕯️", message: "Schedule a little pocket of rest in the next few days.", linkText: "", linkUrl: "" },
+      { day: 23, title: "Favourite Tradition", emoji: "🎊", message: "Think about a tradition you love (or start a new one!).", linkText: "", linkUrl: "" },
+      { day: 24, title: "Christmas Eve Magic", emoji: "🎅", message: "Slow down, breathe, and soak up the magic of the season.", linkText: "", linkUrl: "" }
+    ];
+
+    const calendarGrid = document.getElementById("calendarGrid");
+    const todayInfo = document.getElementById("todayInfo");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalClose = document.getElementById("modalClose");
+    const modalDayPill = document.getElementById("modalDayPill");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const modalImage = document.getElementById("modalImage");
+    const modalLink = document.getElementById("modalLink");
+    const modalLinkText = document.getElementById("modalLinkText");
+    const toast = document.getElementById("toast");
+    const toastText = document.getElementById("toastText");
+
+    // Helper: format date nicely
+    function formatDate(date) {
+      return date.toLocaleDateString(undefined, {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+    }
+
+    function buildCalendar() {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const isDecember = now.getMonth() === 11; // 0-based, December == 11
+      const currentDay = now.getDate();
+
+      todayInfo.textContent = `Today is ${formatDate(now)}.`;
+
+      for (let day = 1; day <= 24; day++) {
+        const dayData = dayContent.find((d) => d.day === day) || {
+          day,
+          title: `Day ${day}`,
+          message: "Edit the content for this door in the dayContent array.",
+          emoji: "🎁",
+          linkText: "",
+          linkUrl: ""
+        };
+
+        // Decide if the door is unlocked
+        let unlocked = false;
+        if (isDecember) {
+          unlocked = currentDay >= day;
+        } else if (now.getMonth() > 11) {
+          // After December, unlock everything
+          unlocked = true;
+        } else if (now.getMonth() < 11) {
+          unlocked = false;
+        }
+
+        const dayDiv = document.createElement("div");
+        dayDiv.className = "day";
+
+        const doorButton = document.createElement("button");
+        doorButton.type = "button";
+        doorButton.className = "door" + (unlocked ? "" : " door-locked");
+        doorButton.dataset.day = day;
+
+        const inner = document.createElement("div");
+        inner.className = "door-inner";
+
+        const numberSpan = document.createElement("div");
+        numberSpan.className = "door-number";
+        numberSpan.textContent = day;
+
+        const iconSpan = document.createElement("div");
+        iconSpan.className = "door-icon";
+        iconSpan.textContent = dayData.emoji || "🎁";
+
+        const labelSpan = document.createElement("div");
+        labelSpan.className = "door-label";
+        labelSpan.innerHTML = unlocked ? "Click to open" : "Locked until December " + day;
+
+        const lockBadge = document.createElement("div");
+        lockBadge.className = "lock-badge";
+        lockBadge.innerHTML = unlocked
+          ? "<span>✅</span><span>Open</span>"
+          : "<span>🔒</span><span>Locked</span>";
+
+        const lockText = document.createElement("div");
+        lockText.className = "lock-text";
+        lockText.textContent = unlocked ? "Ready when you are." : "Opens on Dec " + day;
+
+        inner.appendChild(numberSpan);
+        inner.appendChild(iconSpan);
+        inner.appendChild(labelSpan);
+        inner.appendChild(lockText);
+        doorButton.appendChild(inner);
+        doorButton.appendChild(lockBadge);
+        dayDiv.appendChild(doorButton);
+        calendarGrid.appendChild(dayDiv);
+
+        // Click handler
+        doorButton.addEventListener("click", () => {
+          if (!unlocked) {
+            showToast(`Too early! Day ${day} unlocks on December ${day}.`);
+            return;
+          }
+          openModal(dayData);
+        });
+      }
+    }
+
+    function openModal(dayData) {
+      modalDayPill.textContent = `Day ${dayData.day}`;
+      modalTitle.innerHTML = dayData.title || `Day ${dayData.day}`;
+      modalBody.innerHTML = dayData.message || "";
+      modalImage.textContent = dayData.emoji || "🎁";
+
+      if (dayData.linkUrl && dayData.linkText) {
+        modalLink.href = dayData.linkUrl;
+        modalLinkText.textContent = dayData.linkText;
+        modalLink.style.display = "inline-flex";
+      } else {
+        modalLink.style.display = "none";
+      }
+
+      modalBackdrop.classList.add("open");
+    }
+
+    function closeModal() {
+      modalBackdrop.classList.remove("open");
+    }
+
+    function showToast(message) {
+      toastText.textContent = message;
+      toast.classList.add("visible");
+      clearTimeout(showToast._timeout);
+      showToast._timeout = setTimeout(() => {
+        toast.classList.remove("visible");
+      }, 2300);
+    }
+
+    // Very lightweight snow animation
+    function createSnowflakes(count = 25) {
+      for (let i = 0; i < count; i++) {
+        const flake = document.createElement("div");
+        flake.className = "snowflake";
+        flake.textContent = Math.random() > 0.5 ? "❄️" : "❅";
+        flake.style.left = Math.random() * 100 + "vw";
+        flake.style.animationDuration = 8 + Math.random() * 10 + "s";
+        flake.style.animationDelay = Math.random() * 10 + "s";
+        document.body.appendChild(flake);
+      }
+    }
+
+    // Modal & backdrop events
+    modalClose.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === modalBackdrop) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+
+    // Build everything
+    buildCalendar();
+    createSnowflakes();
+  </script>
+</body>
+</html>
