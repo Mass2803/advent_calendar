@@ -255,32 +255,32 @@ body {
 
 <script>
 /* ----------- EDITABLE DAY CONTENT ----------- */
-    const dayContent = [
-      { day: 1, title: "Welcome to December!", emoji: "🎄", message: "This part was written on the second so skip to today - enjoy a playlist as an apology", linkText: "Play a Christmas playlist", linkUrl: "https://www.youtube.com/results?search_query=christmas+playlist" },
-      { day: 2, title: "Coffee", emoji: "☕", message: "A coffee from blank street on me", linkText: "", linkUrl: "" },
-      { day: 3, title: "Cosy Lights", emoji: "✨", message: "Hang fairy lights or light a candle to make your space feel extra cosy.", linkText: "", linkUrl: "" },
-      { day: 4, title: "Festive Walk", emoji: "🚶‍♂️", message: "Take a short walk and look for decorations or lights in your neighbourhood.", linkText: "", linkUrl: "" },
-      { day: 5, title: "Kindness Day", emoji: "💌", message: "Send a kind message to someone you haven’t spoken to in a while.", linkText: "", linkUrl: "" },
-      { day: 6, title: "Treat Yourself", emoji: "🍫", message: "Enjoy a little sweet treat &mdash; you’ve earned it.", linkText: "", linkUrl: "" },
-      { day: 7, title: "Movie Night", emoji: "🎬", message: "Watch a festive film (or at least a cosy episode of a favourite show).", linkText: "Find Christmas movies", linkUrl: "https://www.google.com/search?q=best+christmas+movies" },
-      { day: 8, title: "Decorate Something", emoji: "🎀", message: "Add a festive touch to your desk, room, or background.", linkText: "", linkUrl: "" },
-      { day: 9, title: "Hot Drink Break", emoji: "☕", message: "Make a hot chocolate, tea or coffee and really savour it.", linkText: "", linkUrl: "" },
-      { day: 10, title: "Give a Compliment", emoji: "😊", message: "Give someone a genuine compliment today.", linkText: "", linkUrl: "" },
-      { day: 11, title: "Tiny Tidy-Up", emoji: "🧹", message: "Spend 5 minutes tidying your space so it feels calmer.", linkText: "", linkUrl: "" },
-      { day: 12, title: "Listen to a Song", emoji: "🎵", message: "Play a Christmas song that always makes you smile.", linkText: "", linkUrl: "" },
-      { day: 13, title: "Digital Detox 10", emoji: "📵", message: "Take 10 minutes away from screens, just breathing and being.", linkText: "", linkUrl: "" },
-      { day: 14, title: "Write a Wish", emoji: "⭐", message: "Write down one wish or intention for the new year.", linkText: "", linkUrl: "" },
-      { day: 15, title: "Share a Memory", emoji: "📸", message: "Share a favourite winter memory with a friend or family member.", linkText: "", linkUrl: "" },
-      { day: 16, title: "Cosy Reading", emoji: "📚", message: "Read a few pages of a book, blog or article you enjoy.", linkText: "", linkUrl: "" },
-      { day: 17, title: "Charity Moment", emoji: "🎁", message: "Do something small for someone else &mdash; donate, help, or simply listen.", linkText: "", linkUrl: "" },
-      { day: 18, title: "Stretch & Breathe", emoji: "🧘‍♀️", message: "Take five slow deep breaths and gently stretch your body.", linkText: "", linkUrl: "" },
-      { day: 19, title: "Bake or Buy", emoji: "🍪", message: "Enjoy a festive snack &mdash; homemade or store-bought both count!", linkText: "", linkUrl: "" },
-      { day: 20, title: "Photo Time", emoji: "🤳", message: "Take a silly or cosy photo to remember this season.", linkText: "", linkUrl: "" },
-      { day: 21, title: "Write a Card", emoji: "💌", message: "Write a card or message to someone special.", linkText: "", linkUrl: "" },
-      { day: 22, title: "Plan a Pause", emoji: "🕯️", message: "Schedule a little pocket of rest in the next few days.", linkText: "", linkUrl: "" },
-      { day: 23, title: "Favourite Tradition", emoji: "🎊", message: "Think about a tradition you love (or start a new one!).", linkText: "", linkUrl: "" },
-      { day: 24, title: "Christmas Eve Magic", emoji: "🎅", message: "Slow down, breathe, and soak up the magic of the season.", linkText: "", linkUrl: "" }
-    ];
+const days = [
+  { day: 1, title: "Welcome!", emoji: "🎄", text: "Let the festive season begin!", link: "" },
+  { day: 2, title: "Be Kind", emoji: "💖", text: "Send someone a warm message.", link: "" },
+  { day: 3, title: "Treat Yourself", emoji: "🍫", text: "Have a sweet treat today!", link: "" },
+  { day: 4, title: "Take a Walk", emoji: "🚶‍♂️", text: "Look for Christmas lights!", link: "" },
+  { day: 5, title: "Hot Drink", emoji: "☕", text: "Make your favourite warm drink.", link: "" },
+  { day: 6, title: "Cosy Time", emoji: "🕯️", text: "Light a candle and relax.", link: "" },
+  { day: 7, title: "Movie Night", emoji: "🎬", text: "Watch a festive movie!", link: "" },
+  { day: 8, title: "Decorate", emoji: "🎀", text: "Add something festive to your room.", link: "" },
+  { day: 9, title: "Smile", emoji: "😊", text: "Give someone a compliment.", link: "" },
+  { day: 10, title: "Tidy Up", emoji: "🧹", text: "One tiny clean-up task!", link: "" },
+  { day: 11, title: "Music Break", emoji: "🎵", text: "Play your favourite song.", link: "" },
+  { day: 12, title: "Breathe", emoji: "🧘‍♀️", text: "Take 5 deep breaths.", link: "" },
+  { day: 13, title: "Write Something", emoji: "📝", text: "Write one intention.", link: "" },
+  { day: 14, title: "Memory Time", emoji: "📸", text: "Look at an old happy photo.", link: "" },
+  { day: 15, title: "Snack!", emoji: "🍪", text: "Enjoy something tasty.", link: "" },
+  { day: 16, title: "Stretch", emoji: "🤸‍♂️", text: "Do a quick stretch.", link: "" },
+  { day: 17, title: "Help Out", emoji: "🎁", text: "Do something kind for someone.", link: "" },
+  { day: 18, title: "Read a Bit", emoji: "📚", text: "Read a few pages of anything.", link: "" },
+  { day: 19, title: "Take a Photo", emoji: "🤳", text: "Capture a moment today.", link: "" },
+  { day: 20, title: "Plan Rest", emoji: "🛌", text: "Pick a day to relax soon.", link: "" },
+  { day: 21, title: "Warm Wishes", emoji: "💌", text: "Send someone good vibes.", link: "" },
+  { day: 22, title: "Joy", emoji: "⭐", text: "Think of something that makes you smile.", link: "" },
+  { day: 23, title: "Tradition", emoji: "🎊", text: "Think of a tradition you love.", link: "" },
+  { day: 24, title: "Christmas Eve!", emoji: "🎅", text: "Enjoy the magic!", link: "" }
+];
 
 /* ----------- BUILD THE CALENDAR ----------- */
 const grid = document.getElementById("grid");
