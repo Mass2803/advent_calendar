@@ -400,32 +400,60 @@
       - emoji: large emoji shown in popup
       - linkText / linkUrl: optional button at the bottom
     */
-    const dayContent = [
-      { day: 1, title: "Welcome to December!", emoji: "🎄", message: "This part was written on the second so skip to today - enjoy a playlist as an apology", linkText: "Play a Christmas playlist", linkUrl: "https://www.youtube.com/results?search_query=christmas+playlist" },
-      { day: 2, title: "Coffee", emoji: "☕", message: "A coffee from blank street on me", linkText: "", linkUrl: "" },
-      { day: 3, title: "Cosy Lights", emoji: "✨", message: "Hang fairy lights or light a candle to make your space feel extra cosy.", linkText: "", linkUrl: "" },
-      { day: 4, title: "Festive Walk", emoji: "🚶‍♂️", message: "Take a short walk and look for decorations or lights in your neighbourhood.", linkText: "", linkUrl: "" },
-      { day: 5, title: "Kindness Day", emoji: "💌", message: "Send a kind message to someone you haven’t spoken to in a while.", linkText: "", linkUrl: "" },
-      { day: 6, title: "Treat Yourself", emoji: "🍫", message: "Enjoy a little sweet treat &mdash; you’ve earned it.", linkText: "", linkUrl: "" },
-      { day: 7, title: "Movie Night", emoji: "🎬", message: "Watch a festive film (or at least a cosy episode of a favourite show).", linkText: "Find Christmas movies", linkUrl: "https://www.google.com/search?q=best+christmas+movies" },
-      { day: 8, title: "Decorate Something", emoji: "🎀", message: "Add a festive touch to your desk, room, or background.", linkText: "", linkUrl: "" },
-      { day: 9, title: "Hot Drink Break", emoji: "☕", message: "Make a hot chocolate, tea or coffee and really savour it.", linkText: "", linkUrl: "" },
-      { day: 10, title: "Give a Compliment", emoji: "😊", message: "Give someone a genuine compliment today.", linkText: "", linkUrl: "" },
-      { day: 11, title: "Tiny Tidy-Up", emoji: "🧹", message: "Spend 5 minutes tidying your space so it feels calmer.", linkText: "", linkUrl: "" },
-      { day: 12, title: "Listen to a Song", emoji: "🎵", message: "Play a Christmas song that always makes you smile.", linkText: "", linkUrl: "" },
-      { day: 13, title: "Digital Detox 10", emoji: "📵", message: "Take 10 minutes away from screens, just breathing and being.", linkText: "", linkUrl: "" },
-      { day: 14, title: "Write a Wish", emoji: "⭐", message: "Write down one wish or intention for the new year.", linkText: "", linkUrl: "" },
-      { day: 15, title: "Share a Memory", emoji: "📸", message: "Share a favourite winter memory with a friend or family member.", linkText: "", linkUrl: "" },
-      { day: 16, title: "Cosy Reading", emoji: "📚", message: "Read a few pages of a book, blog or article you enjoy.", linkText: "", linkUrl: "" },
-      { day: 17, title: "Charity Moment", emoji: "🎁", message: "Do something small for someone else &mdash; donate, help, or simply listen.", linkText: "", linkUrl: "" },
-      { day: 18, title: "Stretch & Breathe", emoji: "🧘‍♀️", message: "Take five slow deep breaths and gently stretch your body.", linkText: "", linkUrl: "" },
-      { day: 19, title: "Bake or Buy", emoji: "🍪", message: "Enjoy a festive snack &mdash; homemade or store-bought both count!", linkText: "", linkUrl: "" },
-      { day: 20, title: "Photo Time", emoji: "🤳", message: "Take a silly or cosy photo to remember this season.", linkText: "", linkUrl: "" },
-      { day: 21, title: "Write a Card", emoji: "💌", message: "Write a card or message to someone special.", linkText: "", linkUrl: "" },
-      { day: 22, title: "Plan a Pause", emoji: "🕯️", message: "Schedule a little pocket of rest in the next few days.", linkText: "", linkUrl: "" },
-      { day: 23, title: "Favourite Tradition", emoji: "🎊", message: "Think about a tradition you love (or start a new one!).", linkText: "", linkUrl: "" },
-      { day: 24, title: "Christmas Eve Magic", emoji: "🎅", message: "Slow down, breathe, and soak up the magic of the season.", linkText: "", linkUrl: "" }
-    ];
+const dayContent = [
+
+  { day: 1, title: "Welcome to December!", emoji: "🎄", message: "This part was written on the second so skip to today - enjoy a playlist as an apology", linkText: "Play a Christmas playlist", linkUrl: "https://www.youtube.com/results?search_query=christmas+playlist" },
+
+  { day: 2, title: "Coffee", emoji: "☕", message: "A coffee from blank street on me", linkText: "", linkUrl: "" },
+
+  { day: 3, title: "Cosy Lights", emoji: "✨", message: "Go see the xmas lights in central london", linkText: "", linkUrl: "" },
+
+  { day: 4, title: "Festive Walk", emoji: "🚶‍♂️", message: "Candlelit dinner.", linkText: "", linkUrl: "" },
+
+  { day: 5, title: "Polaroid", emoji: "📷", message: "I’ll make you a little polaroid-style card from a moment we've had.", linkText: "", linkUrl: "" },
+
+  { day: 6, title: "Mini Scrapbook", emoji: "📘", message: "A small scrapbook page about us. Nothing fancy but it’ll look cute.", linkText: "", linkUrl: "" },
+
+  { day: 7, title: "Your Call", emoji: "👗", message: "Next time we meet, you pick my vibe: comfy, smart, or date-night.", linkText: "", linkUrl: "" },
+
+  { day: 8, title: "Plan Something", emoji: "🗓️", message: "We decide on one simple thing to do this month together.", linkText: "", linkUrl: "" },
+
+  { day: 9, title: "Playlist", emoji: "🎧", message: "I’ll make you a playlist with a reason behind each song.", linkText: "", linkUrl: "" },
+
+  { day: 10, title: "Question Cards", emoji: "🎴", message: "A few question cards for us. Chill ones, nothing deep.", linkText: "", linkUrl: "" },
+
+  { day: 11, title: "Massage", emoji: "💆‍♀️", message: "A neck + shoulder massage from me.", linkText: "", linkUrl: "" },
+
+  { day: 12, title: "Nando’s", emoji: "🐓🔥", message: "A weekday Nando’s date. Simple and elite.", linkText: "", linkUrl: "" },
+
+  { day: 13, title: "Red/Green Flag", emoji: "🚦", message: "Tell me one green flag I have… or a harmless red flag. I’ll send you one back 😉", linkText: "", linkUrl: "" },
+
+  { day: 14, title: "Photo Edit", emoji: "🎥", message: "I’ll make a short little photo/video edit of us.", linkText: "", linkUrl: "" },
+
+  { day: 15, title: "Date Plan", emoji: "📅", message: "I plan a whole date for us. Low cost, still cute.", linkText: "", linkUrl: "" },
+
+  // MOVED FROM DAY 23
+  { day: 16, title: "Your Move", emoji: "😉", message: "You send me one flirty hint for next time we see each other.", linkText: "", linkUrl: "" },
+
+  { day: 17, title: "Comfort Show", emoji: "📺", message: "We watch an episode of your comfort show together.", linkText: "", linkUrl: "" },
+
+  { day: 18, title: "Skill Swap", emoji: "🎓", message: "We each teach the other one random skill. Could be anything.", linkText: "", linkUrl: "" },
+
+  { day: 19, title: "Indoor Picnic", emoji: "🧺", message: "I set up a little indoor picnic. Blankets included.", linkText: "", linkUrl: "" },
+
+  { day: 20, title: "Cheap Date", emoji: "🎄", message: "A cheap but fun seasonal date. Your pick or mine.", linkText: "", linkUrl: "" },
+
+  { day: 21, title: "Flirty Choice", emoji: "🔥", message: "Pick one:\n1) Choose what I wear next time\n2) Tell me something you want us to try\n3) Pick where our next kiss happens 😉", linkText: "", linkUrl: "" },
+
+  { day: 22, title: "Story Time", emoji: "💬", message: "I tell you a story from my life you haven’t heard yet.", linkText: "", linkUrl: "" },
+
+  // NEW DAY 23
+  { day: 23, title: "IOU", emoji: "🎁", message: "An IOU for anything you want — your choice, no complaints from me.", linkText: "", linkUrl: "" },
+
+  { day: 24, title: "Christmas Eve", emoji: "🎅❤️", message: "A proper Christmas Eve note from me. Nothing dramatic.", linkText: "", linkUrl: "" }
+
+];
+
 
     const calendarGrid = document.getElementById("calendarGrid");
     const todayInfo = document.getElementById("todayInfo");
